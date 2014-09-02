@@ -15,3 +15,4 @@
 
 ## Screenshots
 
+![Screenshot](https://www.evernote.com/shard/s2/sh/a6008697-d4d8-4f5c-871b-9a9428cbfb54/745eb34bc0c588791a33ee5dc93a5aa3/deep/0/Engineering-KPIs.png "Graphite Text & Sparkline Widget")
