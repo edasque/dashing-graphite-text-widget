@@ -61,6 +61,7 @@ class Dashing.Timer extends Dashing.Widget
     chartRangeMin: 0,
     drawNormalOnTop: true,
     normalRangeMax: 3000,
+    width:'12em',
     normalRangeColor: '#336699'})
 
     
