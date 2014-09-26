@@ -95,7 +95,10 @@ class Dashing.Timer extends Dashing.Widget
 
    
     unit = @unit
-    $(@node).find(".value").text("#{dataAverage}#{unit}").fadeOut().fadeIn()
+    if isNaN dataAverage
+      $(@node).find(".value").text("N/A").fadeOut().fadeIn()
+    else 
+      $(@node).find(".value").text("#{dataAverage}#{unit}").fadeOut().fadeIn()
     $(@node).find(".change-rate span").text("#{change_rate}")
     $(@node).find(".change-rate span").fadeOut().fadeIn()
     $(@node).find(".updated-at").text(moment().format('MMMM Do YYYY, h:mmA')).fadeOut().fadeIn()
