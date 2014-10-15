@@ -4,7 +4,7 @@
 
 ## Installation
 
-- Download [jquery.sparklines.js](http://omnipotent.net/jquery.sparkline/#s-about) into the `assets/javascripts` folder
+- Download [jquery.sparklines.js](http://omnipotent.net/jquery.sparkline/#s-about) and [lodash.min.js](https://raw.githubusercontent.com/lodash/lodash/2.4.1/dist/lodash.min.js) and place them in the `assets/javascripts` folder
 - Finally create a dashboard and use the Timer widget. Dont' forget to set your timer, title & graphite_host:
 
 ```html
@@ -15,7 +15,7 @@
 </li>
 ```
 
-Include the ```data-debug=true``` property if you want some diagnostic information for a widget
+Include the ```data-debug=true``` property if you want some diagnostic information in the JS console for a widget
 
 ## Screenshots
 
