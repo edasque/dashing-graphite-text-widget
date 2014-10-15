@@ -9,9 +9,13 @@
 
 ```html
 <li data-row="1" data-col="1" data-sizex="1" data-sizey="1">
-      <div data-view="Timer" data-timer="stats.timers.bob.startPage.rendered.mean" data-title="Campaign List" graphite_host="http://my.graphite.host" data-unit="ms"></div>
+      <div data-view="Timer" data-timer="stats.timers.bob.startPage.rendered.mean"
+      data-title="Campaign List" data-graphite_host="http://my.graphite.host"
+       data-unit="ms"></div>
 </li>
 ```
+
+Include the ```data-debug=true``` property if you want some diagnostic information for a widget
 
 ## Screenshots
 

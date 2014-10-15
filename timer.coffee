@@ -2,8 +2,15 @@ class Dashing.Timer extends Dashing.Widget
 
   ready: ->
 
+
+    if @get('debug')
+      @debug = (@get('debug'))
+    else
+      @debug = false
+
+
     # use the data-unit property in the widget tag to indicate the unit to display (Default:ms)
-    if @get('unit')
+    if typeof @get('unit') isnt "undefined" 
       @unit = (@get('unit'))
     else
       @unit = "ms"
@@ -17,8 +24,10 @@ class Dashing.Timer extends Dashing.Widget
     $n = $(@node)
 
     # The widget looks at 24 hours worth of data in 10 minutes increment and compares it to the same day a week ago
-    targets= ["smartSummarize(#{@get('timer')},'10min','avg')",
-    "timeShift(smartSummarize(#{@get('timer')},'10min','avg'),'7d')"]
+    targets= ["summarize(#{@get('timer')},'10min','avg')",
+    "timeShift(summarize(#{@get('timer')},'10min','avg'),'7d')"]
+
+    console.dir targets if @debug
     
     @encoded_target = _.reduce(targets, (memo,target,key) ->
       memo += "&target=#{target}"
@@ -30,6 +39,9 @@ class Dashing.Timer extends Dashing.Widget
       interval = 60000
 
     self = this
+
+    console.dir self if @debug
+
     setInterval ->
       self.updateGraph()
     , interval
@@ -42,14 +54,16 @@ class Dashing.Timer extends Dashing.Widget
     @updateSparkline()
 
   updateGraph: ->
-    $.getJSON "#{@graphite_host}/render?format=json#{@encoded_target}",
+    graph_data_url = "#{@graphite_host}/render?format=json#{@encoded_target}"
+    console.log graph_data_url if @debug
+    $.getJSON graph_data_url,
       from: '-1d'
       until: 'now',
       renderResults.bind(@)
 
   updateSparkline: ->
     timer = @get('timer')
-    target = "&target=smartSummarize(#{timer},'8h','avg')"
+    target = "&target=summarize(#{timer},'8h','avg')"
     $.getJSON "#{@graphite_host}/render?format=json#{target}",
       from: '-30d'
       until: 'now',
@@ -97,7 +111,7 @@ class Dashing.Timer extends Dashing.Widget
     unit = @unit
     if isNaN dataAverage
       $(@node).find(".value").text("N/A").fadeOut().fadeIn()
-    else 
+    else
       $(@node).find(".value").text("#{dataAverage}#{unit}").fadeOut().fadeIn()
     $(@node).find(".change-rate span").text("#{change_rate}")
     $(@node).find(".change-rate span").fadeOut().fadeIn()
