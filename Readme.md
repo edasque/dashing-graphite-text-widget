@@ -20,3 +20,13 @@ Include the ```data-debug=true``` property if you want some diagnostic informati
 ## Screenshots
 
 ![Screenshot](https://www.evernote.com/shard/s2/sh/a6008697-d4d8-4f5c-871b-9a9428cbfb54/745eb34bc0c588791a33ee5dc93a5aa3/deep/0/Engineering-KPIs.png "Graphite Text & Sparkline Widget")
+
+## Changelog
+* 10/16/14:
+  * Added dependency install info in this readme and better exception handling in the code that points to missing dependencies.
+  * Added data-debug as well and peppered the code for better diagnostic information as well.
+  * Also will not display the sparkline & legend if there is less than 2 datapoints available.
+  * Made unit text smaller. In earlier commit make empty string a valid metric
+  * Renamed object propery timer to metric since we can show any metric
+  * Ideally would rename the object
+  * Cleaned up the SCSS file

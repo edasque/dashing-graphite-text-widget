@@ -11,7 +11,7 @@ $moreinfo-color:    rgba(255, 255, 255, 0.7);
 // ----------------------------------------------------------------------------
 // Widget-number styles
 // ----------------------------------------------------------------------------
-.widget-timer {
+  .widget-timer {
 
   background-color: $background-color;
 
@@ -27,20 +27,22 @@ $moreinfo-color:    rgba(255, 255, 255, 0.7);
   .title {
     color: $title-color;
   }
+
   .error {
     background-color: $error-color;
     color: white;
     padding:1em;
     border-radius: 25px;
     display:none;
-  }
-  .error .highlighted{
-    background-color: #444444;
-    padding:0 4px 0 4px;
-
-  }
-  .error a {
-    text-decoration: underline;
+    .highlighted
+    {
+      background-color: #444444;
+      padding:0 4px 0 4px;
+    }
+    a
+    {
+      text-decoration: underline;
+    }
 
   }
   .value {

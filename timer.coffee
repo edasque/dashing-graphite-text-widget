@@ -87,13 +87,20 @@ class Dashing.Timer extends Dashing.Widget
       renderSparkline.bind(@)
 
   renderSparkline = (data) ->
-    $(@node).find(".sparkline").sparkline(_.compact(roundUpArrayValues(removeTimestampFromTuple(data[0].datapoints))), {
-    type: 'line',
-    chartRangeMin: 0,
-    drawNormalOnTop: true,
-    normalRangeMax: 3000,
-    width:'12em',
-    normalRangeColor: '#336699'})
+    console.dir(data) if @debug
+    dataset = _.compact(roundUpArrayValues(removeTimestampFromTuple(data[0].datapoints)))
+
+    console.log(dataset.length)
+    if dataset.length>1
+      $(@node).find(".sparkline-chart").sparkline(dataset, {
+      type: 'line',
+      chartRangeMin: 0,
+      drawNormalOnTop: true,
+      normalRangeMax: 3000,
+      width:'12em',
+      normalRangeColor: '#336699'})
+    else
+      $(@node).find(".sparkline").hide()
 
   renderResults = (data) ->
     dataAverage = Math.floor(array_values_average(_.compact(removeTimestampFromTuple(data[0].datapoints))))
@@ -103,7 +110,7 @@ class Dashing.Timer extends Dashing.Widget
     $(@node).find(".change-rate i").removeClass("icon-arrow-up").removeClass("icon-arrow-down")
 
     if isNaN change_rate
-      change_rate = "No previous history"
+      change_rate = "No data for -7d"
       $(@node).find(".change-rate").css("font-size","1em")
       $(@node).find(".change-rate").css("line-height","40px")
 
@@ -126,7 +133,7 @@ class Dashing.Timer extends Dashing.Widget
     if isNaN dataAverage
       $(@node).find(".value").text("N/A").fadeOut().fadeIn()
     else
-      $(@node).find(".value").text("#{dataAverage}#{unit}").fadeOut().fadeIn()
+      $(@node).find(".value").html("#{dataAverage}<span style='font-size:.3em;'>#{unit}</span>").fadeOut().fadeIn()
     $(@node).find(".change-rate span").text("#{change_rate}")
     $(@node).find(".change-rate span").fadeOut().fadeIn()
     $(@node).find(".updated-at").text(moment().format('MMMM Do YYYY, h:mmA')).fadeOut().fadeIn()
