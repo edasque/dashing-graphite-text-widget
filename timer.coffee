@@ -75,9 +75,13 @@ class Dashing.Timer extends Dashing.Widget
       renderResults.bind(@)
 
   updateSparkline: ->
-    timer = @get('timer')
-    target = "&target=summarize(#{timer},'8h','avg')"
-    $.getJSON "#{@graphite_host}/render?format=json#{target}",
+    metric = @get('metric')
+    target = "&target=summarize(#{metric},'8h','avg')"
+    graph_data_url = "#{@graphite_host}/render?format=json#{target}"
+
+    console.log "Month worth of data in 8 hours increments for #{metric} grabbed from: #{graph_data_url}" if @debug
+
+    $.getJSON graph_data_url,
       from: '-30d'
       until: 'now',
       renderSparkline.bind(@)
