@@ -19,6 +19,21 @@ class Dashing.Timer extends Dashing.Widget
     else
       @debug = false
 
+    if @get('threshold')
+      @threshold = (@get('threshold'))
+    else
+      @threshold = undefined
+
+    if @get('threshold_direction')
+      @threshold_direction = (@get('threshold_direction'))
+    else
+      @threshold_direction = -1;
+
+    if @get('more_info')
+      @more_info = (@get('more_info'))
+    else
+      @more_info = "";
+
 
 
     # use the data-unit property in the widget tag to indicate the unit to display (Default:ms)
@@ -109,6 +124,12 @@ class Dashing.Timer extends Dashing.Widget
 
     $(@node).find(".change-rate i").removeClass("icon-arrow-up").removeClass("icon-arrow-down")
 
+    if (@threshold)
+      if ((dataAverage-@threshold)*@threshold_direction>0)
+        $(@node).addClass("alert");
+      else $(@node).addClass("good");
+    $(@node).find(".more-info").html(@more_info)
+
     if isNaN change_rate
       change_rate = "No data for -7d"
       $(@node).find(".change-rate").css("font-size","1em")
@@ -125,7 +146,7 @@ class Dashing.Timer extends Dashing.Widget
       $(@node).find(".change-rate").css("font-size","1em")
       $(@node).find(".change-rate").css("line-height","40px")
     else
-      $(@node).find(".change-rate").css("color","green")
+      $(@node).find(".change-rate").css("color","white")
       change_rate=change_rate+"%"
       $(@node).find(".change-rate i").addClass("icon-arrow-down")
 

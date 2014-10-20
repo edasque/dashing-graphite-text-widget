@@ -2,11 +2,18 @@
 // Sass declarations
 // ----------------------------------------------------------------------------
 $background-color:  #47bbb3;
-$value-color:       #fff;
+$background-color-alert:  red;
+$background-color-good:  green;
+
+$value-color: #fff;
 $error-color: red;
 
 $title-color:       rgba(255, 255, 255, 0.7);
 $moreinfo-color:    rgba(255, 255, 255, 0.7);
+
+.widget-timer.alert { background-color: $background-color-alert;}
+.widget-timer.good { background-color: $background-color-good;}
+
 
 // ----------------------------------------------------------------------------
 // Widget-number styles
@@ -14,6 +21,8 @@ $moreinfo-color:    rgba(255, 255, 255, 0.7);
   .widget-timer {
 
   background-color: $background-color;
+
+
 
   .sparkline-label
   {
@@ -62,7 +71,7 @@ $moreinfo-color:    rgba(255, 255, 255, 0.7);
   }
 
   .updated-at {
-    color: rgba(0, 0, 0, 0.3);
+    color: rgba(255, 255, 255, 0.9);
   }
 
 }
