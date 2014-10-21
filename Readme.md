@@ -17,11 +17,24 @@
 
 Include the ```data-debug=true``` property if you want some diagnostic information in the JS console for a widget
 
+## Widget parameters
+| Parameter        | Definition           | Possible values  | Default
+| ------------- |:-------------| :-----| :-----:|
+| data-metric      | the graphite metric path | string | *none*
+| data-title      | the metric name as displayed in the widget      |   string | *none*
+| data-unit | the string displayed next to the metric value      |    can be an empty string "" | ms
+| data-graphite_host | the URL to your graphite host, sans trailing / | URL | http://graphite
+| data-debug | if true will display widget debug information for that instance | boolean | false
+| data-threshold | value under/over with the background will change to red/green | number | *undefined*
+| data-threshold_direction | If set to 1, background will be red if over threshold. If set to -1, background will be red under the threshold | -1 or 1 | -1
+
 ## Screenshots
 
 ![Screenshot](https://www.evernote.com/shard/s2/sh/a6008697-d4d8-4f5c-871b-9a9428cbfb54/745eb34bc0c588791a33ee5dc93a5aa3/deep/0/Engineering-KPIs.png "Graphite Text & Sparkline Widget")
 
 ## Changelog
+* 10/16/14
+  * Added option to display a green or red background based on threshold & threshold direction 
 * 10/16/14:
   * Added dependency install info in this readme and better exception handling in the code that points to missing dependencies.
   * Added data-debug as well and peppered the code for better diagnostic information as well.
