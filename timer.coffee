@@ -1,18 +1,23 @@
 class Dashing.Timer extends Dashing.Widget
 
+  lodash_url = "https://raw.githubusercontent.com/lodash/lodash/2.4.1/dist/lodash.min.js"
+  moment_url = "http://momentjs.com/downloads/moment.min.js"
+  jquery_sparkline_url = "http://omnipotent.net/jquery.sparkline/#s-about"
+
   displayError:(msg) ->
     $(@node).find(".error").show()
     $(@node).find(".error").html(msg)
   displayMissingDependency:(name,url) ->
-    error_html = "<h1>Missing #{name}</h1><p>Download <a href='#{url}'>#{name}</a> and place it in the <span class='highlighted'>assets/javascripts</span> folder"
+    error_html = "<h1>Missing #{name}</h1><p>Download <a href='#{url}'>#{name}</a> and place it in the "
+    error_html += "<span class='highlighted'>assets/javascripts</span> folder"
     @displayError(error_html)
 
   ready: ->
 
     
-    @displayMissingDependency("moment.js","http://momentjs.com/downloads/moment.min.js") if (!window.moment)
-    @displayMissingDependency("lodash.js","https://raw.githubusercontent.com/lodash/lodash/2.4.1/dist/lodash.min.js") if (!window._)
-    @displayMissingDependency("jQuery Sparkline","http://omnipotent.net/jquery.sparkline/#s-about") if (!$.fn.sparkline)
+    @displayMissingDependency("moment.js",moment_url) if (!window.moment)
+    @displayMissingDependency("lodash.js",lodash_url) if (!window._)
+    @displayMissingDependency("jQuery Sparkline",jquery_sparkline_url) if (!$.fn.sparkline)
 
     if @get('debug')
       @debug = (@get('debug'))
@@ -27,7 +32,7 @@ class Dashing.Timer extends Dashing.Widget
     if @get('threshold_direction')
       @threshold_direction = (@get('threshold_direction'))
     else
-      @threshold_direction = -1;
+      @threshold_direction = -1
 
     if @get('more_info')
       @more_info = (@get('more_info'))
@@ -126,8 +131,8 @@ class Dashing.Timer extends Dashing.Widget
 
     if (@threshold)
       if ((dataAverage-@threshold)*@threshold_direction>0)
-        $(@node).addClass("alert");
-      else $(@node).addClass("good");
+        $(@node).addClass("alert")
+      else $(@node).addClass("good")
     $(@node).find(".more-info").html(@more_info)
 
     if isNaN change_rate
