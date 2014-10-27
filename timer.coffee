@@ -14,15 +14,20 @@ class Dashing.Timer extends Dashing.Widget
 
   ready: ->
 
-    
+
     @displayMissingDependency("moment.js",moment_url) if (!window.moment)
     @displayMissingDependency("lodash.js",lodash_url) if (!window._)
     @displayMissingDependency("jQuery Sparkline",jquery_sparkline_url) if (!$.fn.sparkline)
 
-    if @get('debug')
-      @debug = (@get('debug'))
+    @debug = @get('debug')
+
+    if (typeof @get('istimer') != "undefined")
+      @istimer = (@get('istimer'))
     else
-      @debug = false
+      @istimer = true
+
+    console.log "istimer: #{@istimer}" if @debug
+
 
     if @get('threshold')
       @threshold = (@get('threshold'))
@@ -56,8 +61,20 @@ class Dashing.Timer extends Dashing.Widget
     $n = $(@node)
 
     # The widget looks at 24 hours worth of data in 10 minutes increment and compares it to the same day a week ago
-    targets= ["summarize(#{@get('metric')},'10min','avg')",
-    "timeShift(summarize(#{@get('metric')},'10min','avg'),'7d')"]
+    # targets= ["summarize(#{@get('metric')}.count,'10min','sum')",
+    # "summarize(#{@get('metric')}.sum,'10min','sum')",
+    # "timeShift(summarize(#{@get('metric')}.count,'10min','sum'),'7d')",
+    # "timeShift(summarize(#{@get('metric')}.sum,'10min','sum'),'7d')"]
+
+    if (!@istimer)
+      targets= ["#{@get('metric')}",
+      "timeShift(#{@get('metric')},'7d')"]
+    else
+      targets= ["summarize(#{@get('metric')}.count,'10min','sum')",
+      "summarize(#{@get('metric')}.sum,'10min','sum')",
+      "timeShift(summarize(#{@get('metric')}.count,'10min','sum'),'7d')",
+      "timeShift(summarize(#{@get('metric')}.sum,'10min','sum'),'7d')",
+      ]
 
     console.dir targets if @debug
 
@@ -88,7 +105,9 @@ class Dashing.Timer extends Dashing.Widget
   updateGraph: ->
 
     graph_data_url = "#{@graphite_host}/render?format=json#{@encoded_target}"
-    console.log graph_data_url if @debug
+    console.log "Getting today & yesterday data via #{graph_data_url}" if @debug
+
+    #TODO: use an AJAX method that will allow me to handle errors better
     $.getJSON graph_data_url,
       from: '-1d'
       until: 'now',
@@ -101,16 +120,18 @@ class Dashing.Timer extends Dashing.Widget
 
     console.log "Month worth of data in 8 hours increments for #{metric} grabbed from: #{graph_data_url}" if @debug
 
+
+    #TODO: use an AJAX method that will allow me to handle errors better
     $.getJSON graph_data_url,
       from: '-30d'
       until: 'now',
       renderSparkline.bind(@)
 
   renderSparkline = (data) ->
-    console.dir(data) if @debug
+    # console.dir(data) if @debug
     dataset = _.compact(roundUpArrayValues(removeTimestampFromTuple(data[0].datapoints)))
 
-    console.log(dataset.length)
+    console.log("#{dataset.length} segments of sparkline data") if (@debug)
     if dataset.length>1
       $(@node).find(".sparkline-chart").sparkline(dataset, {
       type: 'line',
@@ -123,8 +144,25 @@ class Dashing.Timer extends Dashing.Widget
       $(@node).find(".sparkline").hide()
 
   renderResults = (data) ->
-    dataAverage = Math.floor(array_values_average(_.compact(removeTimestampFromTuple(data[0].datapoints))))
-    dataAverage_minus1w = Math.floor(array_values_average(_.compact(removeTimestampFromTuple(data[1].datapoints))))
+
+    if (@debug)
+      console.log "This is what the numbers look like:"
+      console.dir data
+      # console.dir data[0].datapoints
+      # console.dir removeTimestampFromTuple(data[0].datapoints)
+      # console.dir _.compact(removeTimestampFromTuple(data[0].datapoints))
+    if (@istimer) 
+      today_count = (array_values_sum(_.compact(removeTimestampFromTuple(data[0].datapoints))))
+      today_sum = (array_values_sum(_.compact(removeTimestampFromTuple(data[1].datapoints))))
+      last_week_count = (array_values_sum(_.compact(removeTimestampFromTuple(data[2].datapoints))))
+      last_week_sum = (array_values_sum(_.compact(removeTimestampFromTuple(data[3].datapoints))))
+
+      dataAverage = Math.floor(today_sum/today_count)
+      dataAverage_minus1w = Math.floor(last_week_sum/last_week_count)
+    else
+      dataAverage = Math.floor(array_values_average(_.compact(removeTimestampFromTuple(data[0].datapoints))))
+      dataAverage_minus1w = Math.floor(array_values_average(_.compact(removeTimestampFromTuple(data[1].datapoints))))
+
     change_rate = Math.floor(dataAverage/dataAverage_minus1w*100) - 100
 
     $(@node).find(".change-rate i").removeClass("icon-arrow-up").removeClass("icon-arrow-down")
@@ -175,5 +213,10 @@ class Dashing.Timer extends Dashing.Widget
     _.reduce(arr, (memo, num) ->
       memo + num
     , 0) / arr.length
+
+  array_values_sum = (arr) ->
+    _.reduce(arr, (memo, num) ->
+      memo + num
+    , 0)
 
 
