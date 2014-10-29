@@ -151,7 +151,7 @@ class Dashing.Timer extends Dashing.Widget
       # console.dir data[0].datapoints
       # console.dir removeTimestampFromTuple(data[0].datapoints)
       # console.dir _.compact(removeTimestampFromTuple(data[0].datapoints))
-    if (@istimer) 
+    if (@istimer)
       today_count = (array_values_sum(_.compact(removeTimestampFromTuple(data[0].datapoints))))
       today_sum = (array_values_sum(_.compact(removeTimestampFromTuple(data[1].datapoints))))
       last_week_count = (array_values_sum(_.compact(removeTimestampFromTuple(data[2].datapoints))))
@@ -160,10 +160,10 @@ class Dashing.Timer extends Dashing.Widget
       dataAverage = Math.floor(today_sum/today_count)
       dataAverage_minus1w = Math.floor(last_week_sum/last_week_count)
     else
-      dataAverage = Math.floor(array_values_average(_.compact(removeTimestampFromTuple(data[0].datapoints))))
-      dataAverage_minus1w = Math.floor(array_values_average(_.compact(removeTimestampFromTuple(data[1].datapoints))))
+      dataAverage = Math.floor(array_values_median(_.compact(removeTimestampFromTuple(data[0].datapoints))))
+      dataAverage_minus1w = Math.floor(array_values_median(_.compact(removeTimestampFromTuple(data[1].datapoints))))
 
-    change_rate = Math.floor(dataAverage/dataAverage_minus1w*100) - 100
+    change_rate = Math.floor(dataAverage/dataAverage_minus1w*100) - 100 if dataAverage_minus1w isnt 0
 
     $(@node).find(".change-rate i").removeClass("icon-arrow-up").removeClass("icon-arrow-down")
 
@@ -213,6 +213,16 @@ class Dashing.Timer extends Dashing.Widget
     _.reduce(arr, (memo, num) ->
       memo + num
     , 0) / arr.length
+
+  array_values_median = (x) ->
+    return null if (x.length == 0)
+    sorted = x.slice().sort((a, b) -> a - b)
+    if (sorted.length % 2 == 1)
+      sorted[(sorted.length - 1) / 2]
+    else
+      (sorted[(sorted.length / 2) - 1] +
+      sorted[(sorted.length / 2)]) / 2
+
 
   array_values_sum = (arr) ->
     _.reduce(arr, (memo, num) ->
