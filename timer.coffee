@@ -79,7 +79,7 @@ class Dashing.Timer extends Dashing.Widget
     console.dir targets if @debug
 
     @encoded_target = _.reduce(targets, (memo,target,key) ->
-      memo += "&target=#{target}"
+      memo += "&target=#{encodeURIComponent(target)}"
     ,"")
 
     if @get('interval')
@@ -105,7 +105,7 @@ class Dashing.Timer extends Dashing.Widget
   updateGraph: ->
 
     graph_data_url = "#{@graphite_host}/render?format=json#{@encoded_target}"
-    console.log "Getting today & yesterday data via #{graph_data_url}" if @debug
+    console.log "Getting today & yesterday data via\n#{graph_data_url}" if @debug
 
     #TODO: use an AJAX method that will allow me to handle errors better
     $.getJSON graph_data_url,
@@ -162,6 +162,7 @@ class Dashing.Timer extends Dashing.Widget
     else
       dataAverage = Math.floor(array_values_median(_.compact(removeTimestampFromTuple(data[0].datapoints))))
       dataAverage_minus1w = Math.floor(array_values_median(_.compact(removeTimestampFromTuple(data[1].datapoints))))
+      console.dir _.compact(removeTimestampFromTuple(data[1].datapoints)) if (dataAverage_minus1w is 0 and @debug)
 
     change_rate = Math.floor(dataAverage/dataAverage_minus1w*100) - 100 if dataAverage_minus1w isnt 0
 
@@ -222,7 +223,6 @@ class Dashing.Timer extends Dashing.Widget
     else
       (sorted[(sorted.length / 2) - 1] +
       sorted[(sorted.length / 2)]) / 2
-
 
   array_values_sum = (arr) ->
     _.reduce(arr, (memo, num) ->
