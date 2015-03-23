@@ -28,6 +28,10 @@ class Dashing.Timer extends Dashing.Widget
 
     console.log "istimer: #{@istimer}" if @debug
 
+    if @get('detail_link')
+      @detail_link = (@get('detail_link'))
+    else
+      @detail_link = "http://grafana.ctct.net/#/dashboard/elasticsearch/Welcome"
 
     if @get('threshold')
       @threshold = (@get('threshold'))
@@ -90,6 +94,8 @@ class Dashing.Timer extends Dashing.Widget
     self = this
 
     console.dir self if @debug
+
+    $(@node).find(".detail_link")[0].href=@detail_link
 
     setInterval ->
       self.updateGraph()
@@ -167,6 +173,8 @@ class Dashing.Timer extends Dashing.Widget
     change_rate = Math.floor(dataAverage/dataAverage_minus1w*100) - 100 if dataAverage_minus1w isnt 0
 
     $(@node).find(".change-rate i").removeClass("icon-arrow-up").removeClass("icon-arrow-down")
+
+
 
     if (@threshold)
       if ((dataAverage-@threshold)*@threshold_direction>0)

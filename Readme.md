@@ -22,6 +22,7 @@ Include the ```data-debug=true``` property if you want some diagnostic informati
 | ------------- |:-------------| :-----| :-----:|
 | data-metric      | the graphite metric path | string | *none*
 | data-title      | the metric name as displayed in the widget      |   string | *none*
+| data-detail_link      | the URL to hit for detail on the metric, this the HREF on the widget title      |   string | *none* *(TODO)*
 | data-unit | the string displayed next to the metric value      |    can be an empty string "" | ms
 | data-graphite_host | the URL to your graphite host, sans trailing / | URL | http://graphite
 | data-debug | if true will display widget debug information for that instance | boolean | false
@@ -33,6 +34,8 @@ Include the ```data-debug=true``` property if you want some diagnostic informati
 ![Screenshot](https://www.evernote.com/shard/s2/sh/a6008697-d4d8-4f5c-871b-9a9428cbfb54/745eb34bc0c588791a33ee5dc93a5aa3/deep/0/Engineering-KPIs.png "Graphite Text & Sparkline Widget")
 
 ## Changelog
+* 3/23/15
+  * Added data_link for specifying an HREF on the widget title
 * 10/16/14
   * Added option to display a green or red background based on threshold & threshold direction 
 * 10/16/14:

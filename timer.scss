@@ -36,6 +36,9 @@ $moreinfo-color:    rgba(255, 255, 255, 0.7);
   .title {
     color: $title-color;
   }
+  // h1.title {
+  //   text-decoration: underline;
+  // }
 
   .error {
     background-color: $error-color;
